@@ -17,6 +17,7 @@ module.exports = (app) => {
                 await parentComment.save();
                 await comment.save();
             }
+            comment = await comment.populate('user', 'name').execPopulate();
             res.send(comment);
         } catch (e) {
             res.status(400).send(e);
@@ -24,13 +25,14 @@ module.exports = (app) => {
     });
 
     app.patch('/api/comments', authenticate, async (req, res) => {
-        const comment = new Comment({
+        let comment = new Comment({
             ...req.body
         });
         try {
             const updateComment = await Comment.findOne({_id: comment._id, user: comment.user});
             updateComment.comment = comment.comment;
             await updateComment.save();
+            comment = await comment.populate('user', 'name').execPopulate();
             res.send(comment);
         } catch (e) {
             res.status(400).send(e);

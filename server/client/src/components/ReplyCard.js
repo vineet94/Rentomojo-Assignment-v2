@@ -87,13 +87,18 @@ class ReplyCard extends React.Component {
                         <div className="text">
                             <p>{this.state.comment}</p>
                         </div>
-                        {
-                            !this.state.reply && this.props.user ?
-                                <div className="actions">
+                        <div className="actions">
+                            {
+                                !this.state.reply && this.props.user ?
                                     <a onClick={() => this.setState({reply: true})} className="reply">Reply</a>
-                                </div>
-                                : null
-                        }
+                                    : null
+                            }
+                            {
+                                !this.state.edit && this.props.user && this.props.user._id === this.props.comment.user._id ?
+                                    <a onClick={() => this.setState({edit: true})} className="reply">Edit</a>
+                                    : null
+                            }
+                        </div>
                         {
                             this.state.reply || this.state.edit ?
                                 <ReplyForm
